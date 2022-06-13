@@ -1,19 +1,49 @@
-import { animeList } from "./animeList";
-import { recommendAnime } from "./utils";
-console.log(recommendAnime("kuroko_no_basket"))
-function App() {
-	return (
-		<div className="container">
-			<input
-        placeholder="Enter title..."
-				list="ice-cream-flavors"
-			/>
+import { animeList } from './animeList';
+import { recommendAnime } from './utils';
+import { useState } from 'react';
+import { Card } from './Card';
+import { GridList, Main, Center } from './styles';
 
-			<datalist id="ice-cream-flavors">
-				{/* <option value="Chocolate" /> */}
-        {animeList.map((anime) => <option value={anime.value}>{anime.text}</option>)}
-			</datalist>
-		</div>
+function App() {
+	const [recommendedAnimeList, setRecommendedAnimeList] = useState([]);
+	const [givenAnime, setGivenAnime] = useState();
+	const submitHandler = (e) => {
+		const results = recommendAnime(givenAnime);
+		setRecommendedAnimeList(results);
+		e.preventDefault();
+	};
+
+	return (
+		<Main>
+			<form onSubmit={submitHandler}>
+				<Center>
+					<input
+						onChange={(e) => setGivenAnime(e.target.value)}
+						placeholder="Enter title..."
+						list="ice-cream-flavors"
+					/>
+
+					<button type="submit">Search</button>
+
+					<datalist id="ice-cream-flavors">
+						{animeList.map((anime) => (
+							<option value={anime.value}>{anime.text}</option>
+						))}
+					</datalist>
+				</Center>
+			</form>
+			<GridList>
+				{recommendedAnimeList.map((anime) => (
+					<li>
+						<Card
+							title={anime.text}
+							description={anime.description}
+							imageSrc={anime.image}
+						/>
+					</li>
+				))}
+			</GridList>
+		</Main>
 	);
 }
 

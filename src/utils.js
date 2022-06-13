@@ -1,43 +1,61 @@
-import { animeList } from "./animeList"
+import { animeList } from './animeList';
 
-export const getRandomAnimes = (value, howMany) => {
-
-    let currentAnimeList = [ ...animeList ]
-    const randomAnimeList = []
-
-    for (let i = 0; i < howMany; i ++ ) {
-        // ToDo: Add getting random animes, not the first ones 
-        const differentAnime = currentAnimeList.find( (anime) => anime.value !== value )
-        const filteredAnimeList = currentAnimeList.filter((anime) => anime.value !== differentAnime.value )
-        currentAnimeList = filteredAnimeList
-        randomAnimeList.push(differentAnime)
-    }
+const findRandomIndex = (array) => {
+    // 1. Sprawdz jaki jest ostatni mozliwy index w tabicy i przypisz do zmiennej "max"
+    const max = array.length - 1;
+    const randomNumber = Math.round(Math.random() * max)
     
-    return randomAnimeList
+    return randomNumber
+    // 2. Wylosuj liczbe pomiedzy "min" = 0, a "max"
+    // 3. Zwroc liczbe
 }
 
-export const recommendAnime = (value) => { 
+export const getRandomAnimes = (value, howMany) => {
+	let currentAnimeList = [...animeList];
+	const randomAnimeList = [];
 
-    const userGivenAnime = animeList.find((anime) => anime.value === value)
+	for (let i = 0; i < howMany; i++) {
+        // ToDo: Fix bug when the same anime pops out
+		const differentAnimes = currentAnimeList.filter(
+			(anime) => anime.value !== value
+		);
+        const differentAnimeIndex = findRandomIndex(differentAnimes)
+        const differentAnime = differentAnimes[differentAnimeIndex]
+		const filteredAnimeList = currentAnimeList.filter(
+			(anime) => anime.value !== differentAnime.value
+		);
+		currentAnimeList = filteredAnimeList;
+		randomAnimeList.push(differentAnime);
+	}
 
-    if (userGivenAnime === undefined) {
-        console.warn("value is incorrect!")
-        return []
-    }
+	return randomAnimeList;
+};
 
-    const sameGenreAnimeList = animeList.filter((anime) => anime.genre === userGivenAnime.genre && anime.value !== userGivenAnime.value).slice(0, 3)
+// todo: look for similiarity in name
+export const recommendAnime = (value) => {
+	const userGivenAnime = animeList.find((anime) => anime.value === value);
 
-    if (sameGenreAnimeList.length < 2) {
+	if (userGivenAnime === undefined) {
+		console.warn('value is incorrect!');
+		return [];
+	}
 
-        const howManyToPick = 3 - sameGenreAnimeList.length
-        const randomAnimeList = getRandomAnimes(value, howManyToPick)
+	const sameGenreAnimeList = animeList
+		.filter(
+			(anime) =>
+				anime.genre === userGivenAnime.genre &&
+				anime.value !== userGivenAnime.value
+		)
+		.slice(0, 3);
 
-        return [...sameGenreAnimeList, ...randomAnimeList ]
-    }
+	if (sameGenreAnimeList.length < 2) {
+		const howManyToPick = 3 - sameGenreAnimeList.length;
+		const randomAnimeList = getRandomAnimes(value, howManyToPick);
 
-    const animeMatches = sameGenreAnimeList
+		return [...sameGenreAnimeList, ...randomAnimeList];
+	}
 
-    return animeMatches
- }
+	const animeMatches = sameGenreAnimeList;
 
- 
+	return animeMatches;
+};
