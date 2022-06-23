@@ -10,14 +10,14 @@ const findRandomIndex = (array) => {
     // 3. Zwroc liczbe
 }
 
-export const getRandomAnimes = (value, howMany) => {
+export const getRandomAnimesFromDifferentGenre = (genre, howMany) => {
 	let currentAnimeList = [...animeList];
 	const randomAnimeList = [];
 
 	for (let i = 0; i < howMany; i++) {
         // ToDo: Fix bug when the same anime pops out
 		const differentAnimes = currentAnimeList.filter(
-			(anime) => anime.value !== value
+			(anime) => anime.genre !== genre
 		);
         const differentAnimeIndex = findRandomIndex(differentAnimes)
         const differentAnime = differentAnimes[differentAnimeIndex]
@@ -48,9 +48,9 @@ export const recommendAnime = (value) => {
 		)
 		.slice(0, 3);
 
-	if (sameGenreAnimeList.length < 2) {
+	if (sameGenreAnimeList.length < 3) {
 		const howManyToPick = 3 - sameGenreAnimeList.length;
-		const randomAnimeList = getRandomAnimes(value, howManyToPick);
+		const randomAnimeList = getRandomAnimesFromDifferentGenre(userGivenAnime.genre, howManyToPick);
 
 		return [...sameGenreAnimeList, ...randomAnimeList];
 	}

@@ -7,5 +7,6 @@ export const animeList = [
 	{ value: 'bleach', text: 'Bleach', genre: 'action', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
 	{ value: 'haikyuu', text: 'Haikyuu!', genre: 'sports', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
 	{ value: 'kuroko_no_basket', text: 'Kuroko no Basket', genre: 'sports', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-	{ value: "naruto", text: "Naruto", genre: "action", description: 'Lorem ipsum dolor sit amet.', image: "https://www.tabletowo.pl/wp-content/uploads/2021/11/naruto_fortnite.jpg" }
+	{ value: "naruto", text: "Naruto", genre: "action", description: 'Lorem ipsum dolor sit amet.', image: "https://www.tabletowo.pl/wp-content/uploads/2021/11/naruto_fortnite.jpg" },
+	{ value: 'captain_tsubasa', text: 'Captain Tsubasa', genre: 'sports', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
 ];
