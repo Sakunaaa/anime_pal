@@ -33,15 +33,18 @@ function App() {
 				</Center>
 			</form>
 			<GridList>
-				{recommendedAnimeList.map((anime) => (
-					<li>
-						<Card
-							title={anime.text}
-							description={anime.description}
-							imageSrc={anime.image}
-						/>
-					</li>
-				))}
+				{recommendedAnimeList.map((anime) => { console.log(anime)
+					return (
+						<li>
+							<Card
+								title={anime.text}
+								description={anime.description}
+								imageSrc={anime.image}
+								isHighlighted={anime.match === "same_genre"}
+							/>
+						</li>
+					)
+				})}
 			</GridList>
 		</Main>
 	);
