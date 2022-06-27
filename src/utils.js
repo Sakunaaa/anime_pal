@@ -41,27 +41,56 @@ export const recommendAnime = (value) => {
 		return [];
 	}
 
-	const sameGenreAnimeList = animeList
+	let animeMatches = [];
+
+	// Chcemy znalezc wszystkie anime, ktorych tytul zawiera podane value
+	const similarNameAnimeList = animeList
 		.filter(
 			(anime) =>
-				anime.genre === userGivenAnime.genre &&
+				anime.text.toLowerCase().includes(userGivenAnime.text.toLowerCase()) &&
 				anime.value !== userGivenAnime.value
 		)
-		.slice(0, HOW_MANY_TO_PICK);
+		.slice(0, HOW_MANY_TO_PICK)
+		.map((anime) => ({
+			...anime,
+			match: 'same_name',
+		}));
 
-	if (sameGenreAnimeList.length < HOW_MANY_TO_PICK) {
-		const howManyToPick = HOW_MANY_TO_PICK - sameGenreAnimeList.length;
-		const randomAnimeList = getRandomAnimesFromDifferentGenre(
-			userGivenAnime.genre,
-			howManyToPick
-		);
-
-		return [
-			...sameGenreAnimeList.map((anime) => ({ ...anime, match: 'same_genre' })),
-			...randomAnimeList.map((anime) => ({ ...anime, match: 'random' })),
-		];
-		
+	animeMatches = [...similarNameAnimeList];
+	if (animeMatches.length === HOW_MANY_TO_PICK) {
+		return animeMatches;
 	}
 
-	return sameGenreAnimeList.map((anime) => ({ ...anime, match: 'same_genre' }));
+	const currentHowManyToPick = HOW_MANY_TO_PICK - animeMatches.length;
+	const sameGenreAnimeList = animeList
+		.filter((anime) => {
+			const isSameGenre = anime.genre === userGivenAnime.genre
+			const isNotGivenValue = anime.value !== userGivenAnime.value
+			const isNotAlreadyMatched = animeMatches.includes((currentAnime) => currentAnime.value === anime.value)
+			return (
+				isSameGenre &&
+				isNotGivenValue && 
+				isNotAlreadyMatched
+			);
+		})
+		.slice(0, currentHowManyToPick)
+		.map((anime) => ({
+			...anime,
+			match: 'same_genre',
+		}));
+
+	animeMatches = [...animeMatches, ...sameGenreAnimeList];
+	if (animeMatches.length === HOW_MANY_TO_PICK) {
+		return animeMatches;
+	}
+
+	const currentHowManyToPick2 = HOW_MANY_TO_PICK - animeMatches.length;
+	const randomAnimeList = getRandomAnimesFromDifferentGenre(
+		userGivenAnime.genre,
+		currentHowManyToPick2
+	).map((anime) => ({ ...anime, match: 'random' }));
+
+	animeMatches = [...animeMatches, ...randomAnimeList];
+
+	return animeMatches;
 };
